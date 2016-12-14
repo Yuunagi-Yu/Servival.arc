@@ -7,7 +7,7 @@ public class Laser : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
+		Destroy (this.gameObject, 3.0f);
 	}
 	
 	// Update is called once per frame

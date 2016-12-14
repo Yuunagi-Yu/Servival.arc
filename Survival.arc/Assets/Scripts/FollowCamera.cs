@@ -14,11 +14,11 @@ public class FollowCamera : MonoBehaviour {
 	
 	// Update is called once per frame
 	void LateUpdate () {
+		//プレイヤーを追尾
 		if (Target == null) {
 			return;
 		} else {
 			transform.position = Target.transform.position + targetRelative;
-			//transform.position = Vector3.Lerp (transform.position, newPosition, 0.7f);
 		}
 	}
 }
