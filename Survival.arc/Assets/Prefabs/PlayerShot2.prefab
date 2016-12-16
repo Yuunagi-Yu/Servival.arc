@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4018719380386272}
   - component: {fileID: 96695487664381638}
   - component: {fileID: 114705945716671092}
+  - component: {fileID: 135964714824857546}
   m_Layer: 0
   m_Name: Laser (2)
   m_TagString: Untagged
@@ -38,6 +39,7 @@ GameObject:
   - component: {fileID: 4985788018145712}
   - component: {fileID: 96519025298096946}
   - component: {fileID: 114844639961652032}
+  - component: {fileID: 135289449056549456}
   m_Layer: 0
   m_Name: Laser
   m_TagString: Untagged
@@ -55,6 +57,7 @@ GameObject:
   - component: {fileID: 4589537074830164}
   - component: {fileID: 96191387330107714}
   - component: {fileID: 114418899292936134}
+  - component: {fileID: 135567373370896382}
   m_Layer: 0
   m_Name: Laser (1)
   m_TagString: Untagged
@@ -70,6 +73,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4148897077805954}
+  - component: {fileID: 114185657765361896}
   m_Layer: 0
   m_Name: PlayerShot2
   m_TagString: Untagged
@@ -462,6 +466,17 @@ TrailRenderer:
     textureMode: 0
   m_MinVertexDistance: 0.1
   m_Autodestruct: 0
+--- !u!114 &114185657765361896
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1903008294492146}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b010f2cd3e71b4deb86e44b963e04978, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114418899292936134
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -498,3 +513,39 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 20
+--- !u!135 &135289449056549456
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1662701005022884}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.2
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!135 &135567373370896382
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1880141128105392}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.2
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!135 &135964714824857546
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1363653963036992}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.2
+  m_Center: {x: 0, y: 0, z: 0}
