@@ -22,7 +22,7 @@ public class Laser : MonoBehaviour {
 		if (col.tag == "Wall") {
 			this.gameObject.SetActive (false);
 		} else if (col.tag == "Enemy") {
-			ExecuteEvents.Execute<OnDamage> (
+			ExecuteEvents.Execute<EnemyDamage> (
 				target: col.gameObject,
 				eventData: null,
 				functor: (target, y) => target.OnDamage (damage)

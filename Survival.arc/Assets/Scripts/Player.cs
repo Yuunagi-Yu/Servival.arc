@@ -1,17 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class Player : MonoBehaviour {
+public interface PlayerDamage : IEventSystemHandler {
+	void OnDamage (int damage);
+}
+
+public class Player : MonoBehaviour, PlayerDamage {
 	public float speed;
 	public GameObject laser1, laser2;
 	private Vector3 moveDirection = Vector3.zero;
 	private Vector3 targetPoint = Vector3.zero;
+	private int HP = 1;
+	private TextMesh textMesh;
 	private bool shot = true;
 
 	// Use this for initialization
 	void Start () {
-		
+		//3DTextの初期化
+		textMesh = transform.FindChild ("PlayerLevel").GetComponent<TextMesh> ();
+		textMesh.text = HP + "";
 	}
 	
 	// Update is called once per frame
@@ -55,6 +64,23 @@ public class Player : MonoBehaviour {
 				shot = false;
 				StartCoroutine (shotWait (0.2f));
 			}
+		}
+	}
+
+	public void OnDamage(int damage){
+		HP -= damage;
+		textMesh.text = HP + "";
+		if (HP <= 0) {
+			Camera.main.gameObject.GetComponent<FollowCamera> ().enabled = false;
+			Destroy (this.gameObject);
+		}
+	}
+
+	void OnTriggerEnter(Collider col){
+		if (col.tag == "HPBall") {
+			HP += 1;
+			textMesh.text = HP + "";
+			Destroy (col.gameObject);
 		}
 	}
 
