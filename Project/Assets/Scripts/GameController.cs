@@ -65,7 +65,7 @@ public class GameController : MonoBehaviour {
 
 	IEnumerator isEnemy(){
 		while (player != null) {
-			yield return new WaitForSeconds (1.0f);
+			yield return new WaitForSeconds (1.5f);
 			int count = 0;
 			for (int i = 0; i < enemys.Length; i++) {
 				if (enemys [i].activeInHierarchy) {
@@ -75,6 +75,7 @@ public class GameController : MonoBehaviour {
 				}
 			}
 			if (count == enemys.Length) {
+				yield return new WaitForSeconds (1.5f);
 				Enums.Level++;
 				Spawn ();
 			}

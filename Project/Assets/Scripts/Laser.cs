@@ -7,11 +7,11 @@ using Central;
 public class Laser : MonoBehaviour {
 	public float speed;
 	public GameObject effect;
-	private int damage = 0;
+	private int damage = 1;
 
 	// Use this for initialization
 	void Start () {
-		damage = Enums.playerDamage;
+		
 	}
 	
 	// Update is called once per frame
@@ -25,7 +25,8 @@ public class Laser : MonoBehaviour {
 			obj.transform.parent = this.transform.parent.transform;
 			this.gameObject.SetActive (false);
 		} else if (col.tag == "Enemy") {
-			ExecuteEvents.Execute<EnemyDamage> (
+			Enums.Score++;
+			ExecuteEvents.Execute<EnemyInterface> (
 				target: col.gameObject,
 				eventData: null,
 				functor: (target, y) => target.OnDamage (damage)
