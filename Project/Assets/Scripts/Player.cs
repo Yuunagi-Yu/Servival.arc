@@ -81,7 +81,7 @@ public class Player : MonoBehaviour, PlayerDamage {
 
 	void OnTriggerEnter(Collider col){
 		if (col.tag == "HPBall") {
-			HP += 1;
+			HP += 5;
 			textMesh.text = HP + "";
 			HealHP.SetActive (false);
 			HealHP.SetActive (true);

@@ -5,6 +5,6 @@ using UnityEngine;
 namespace Central {
 	public static class Enums {
 		public static int playerDamage = 1;
-		public static int Level = 10;
+		public static int Level = 1;
 	}
 }
