@@ -1,40 +1,55 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Central;
 
 public class GameController : MonoBehaviour {
-	public GameObject enemy, healHP;
+	public GameObject enemy, healHP,levelUI, scoreUI, upUI
+		, upTarget1, upTarget2, upTarget3, levelTarget1, levelTarget2;
 	private GameObject player, HPBall;
 	private GameObject[] enemys = new GameObject[15];
 	private List<int> enemyList = new List<int> ();
-	private int levelBase = 0, enemyCount = 0;
+	private int levelBase = 0, enemyCount = 0, t = 0;
 	public int phase;
+	private Text level, score;
 
 	// Use this for initialization
 	void Start () {
 		player = GameObject.FindWithTag ("Player").gameObject;
+		level = levelUI.GetComponent<Text> ();
+		score = scoreUI.GetComponent<Text> ();
 		Enums.Level = 0;
+		Enums.Score = 0;
+
+		//敵を生成
 		for (int i = 0; i < enemys.Length; i++) {
 			enemys [i] = Instantiate (enemy) as GameObject;
 			enemys [i].transform.parent = transform;
 			enemys [i].SetActive (false);
 		}
+
+		//HP回復玉を生成
 		HPBall = Instantiate (healHP) as GameObject;
 		HPBall.transform.parent = transform;
 		HPBall.SetActive (false);
+
 		StartCoroutine (isEnemy ());
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+		if (t != Enums.Score) {
+			t = Enums.Score;
+			score.text = "Score : " + t;
+		}
 	}
 
+	//Enemyをスポーン
 	void Spawn(){
 		enemyList.Clear();
 		levelBase = Enums.Level / phase;
-		enemyCount = Random.Range (levelBase * 2 + 3, levelBase * 2 + 6);
+		enemyCount = Random.Range (levelBase + 4, levelBase + 6);
 		int t;
 		for (int i = -1; i < enemyCount; i++) {
 			do {
@@ -63,20 +78,61 @@ public class GameController : MonoBehaviour {
 		}
 	}
 
+	//UIのアニメーション
+	void UIAnimationStart(){
+		iTween.MoveTo (upUI, iTween.Hash (
+			"x", upTarget1.transform.position.x
+			, "time", 0.7f
+			, "oncomplete", "UIAnimationEnd"
+			, "oncompletetarget", this.gameObject
+			, "easeType", "easeOutQuad"
+		));
+	}
+
+	void UIAnimationEnd(){
+		iTween.MoveTo (upUI, iTween.Hash (
+			"x", upTarget2.transform.position.x
+			, "time", 0.7f
+			, "oncomplete", "UIAnimationStop"
+			, "oncompletetarget", this.gameObject
+			, "easeType", "easeInBack"
+		));
+		iTween.MoveTo(levelUI, iTween.Hash(
+			"x", levelTarget2.transform.position.x
+			, "time", 0.7f
+			, "easeType", "easeInBack"
+		));
+	}
+
+	void UIAnimationStop(){
+		iTween.MoveTo(levelUI, iTween.Hash(
+			"x", levelTarget1.transform.position.x
+			, "time", 0.7f
+			, "easeType", "easeOutBack"
+		));
+		upUI.transform.position = upTarget3.transform.position;
+	}
+
+	//Enemyが全て非Activeの時にSpawnを呼び出す
 	IEnumerator isEnemy(){
 		while (player != null) {
-			yield return new WaitForSeconds (1.5f);
 			int count = 0;
 			for (int i = 0; i < enemys.Length; i++) {
 				if (enemys [i].activeInHierarchy) {
-					continue;
+					//continue;
 				} else {
 					count++;
 				}
 			}
+			yield return new WaitForSeconds (0.5f);
 			if (count == enemys.Length) {
+				if (t != 0) {
+					iTween.Stop();
+					UIAnimationStart ();
+				}
 				yield return new WaitForSeconds (1.5f);
 				Enums.Level++;
+				level.text = "Level : " + Enums.Level;
 				Spawn ();
 			}
 		}

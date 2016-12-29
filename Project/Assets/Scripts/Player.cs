@@ -9,10 +9,10 @@ public interface PlayerDamage : IEventSystemHandler {
 
 public class Player : MonoBehaviour, PlayerDamage {
 	public float speed;
-	public GameObject laser1, laser2, HealHP, destroy;
+	public GameObject laser1, HealHP, destroy;
 	private Vector3 moveDirection = Vector3.zero;
 	private Vector3 targetPoint = Vector3.zero;
-	private int HP = 1;
+	private int HP = 10;
 	private TextMesh textMesh;
 	private bool shot = true;
 
@@ -34,10 +34,7 @@ public class Player : MonoBehaviour, PlayerDamage {
 		if (shot) {
 			if (Input.GetMouseButtonDown (0) || Input.GetMouseButton (0)) {
 				Ray mouseRay = Camera.main.ScreenPointToRay (Input.mousePosition);
-				Shot (mouseRay, true);
-			} else if (Input.GetMouseButtonDown (1) || Input.GetMouseButton (1)) {
-				Ray mouseRay = Camera.main.ScreenPointToRay (Input.mousePosition);
-				Shot (mouseRay, false);
+				Shot (mouseRay);
 			}
 		}
 
@@ -45,24 +42,22 @@ public class Player : MonoBehaviour, PlayerDamage {
 		if (moveDirection.magnitude > 0.1f) {
 			transform.position += moveDirection * Time.deltaTime * speed;
 		}
+	}
 
+	void LateUpdate(){
 		//座標制限
 		transform.position = new Vector3 (Mathf.Clamp (transform.position.x, -21.89f, 21.89f)
 			, 0, Mathf.Clamp (transform.position.z, -21.89f, 21.89f));
-	} 
+	}
 
 	//レーザーを発射するメソッド
-	void Shot(Ray ray, bool left){
+	void Shot(Ray ray){
 		RaycastHit hit;
 		if (Physics.Raycast (ray, out hit)) {
 			if (hit.transform.tag == "Field") {
 				targetPoint = new Vector3 (hit.point.x, transform.position.y, hit.point.z);
 				Vector3 spawnPosition = transform.position + moveDirection * Time.deltaTime * speed * 4;
-				if (left) {
-					Instantiate (laser1, spawnPosition, Quaternion.LookRotation (targetPoint - transform.position));
-				} else {
-					Instantiate (laser2, spawnPosition, Quaternion.LookRotation (targetPoint - transform.position));
-				}
+				Instantiate (laser1, spawnPosition, Quaternion.LookRotation (targetPoint - transform.position));
 				shot = false;
 				StartCoroutine (shotWait (0.2f));
 			}

@@ -19,6 +19,7 @@ public class Laser : MonoBehaviour {
 		transform.Translate (Vector3.forward * Time.deltaTime * speed, Space.Self);
 	}
 
+	//壁または敵に当たるとエフェクトを自分の親の子供(同階層)にして非Activeになる
 	void OnTriggerEnter(Collider col){
 		if (col.tag == "Wall") {
 			GameObject obj = (GameObject)Instantiate (effect, transform.position, Quaternion.identity);
@@ -26,11 +27,14 @@ public class Laser : MonoBehaviour {
 			this.gameObject.SetActive (false);
 		} else if (col.tag == "Enemy") {
 			Enums.Score++;
+
+			//Enemyにダメージ
 			ExecuteEvents.Execute<EnemyInterface> (
 				target: col.gameObject,
 				eventData: null,
 				functor: (target, y) => target.OnDamage (damage)
 			);
+
 			GameObject obj = (GameObject)Instantiate (effect, transform.position, Quaternion.identity);
 			obj.transform.parent = this.transform.parent.transform;
 			this.gameObject.SetActive (false);
