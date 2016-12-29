@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class ButtonClick : MonoBehaviour {
+public class SceneButton : MonoBehaviour {
 	public string scene_name;
 
 	// Use this for initialization
