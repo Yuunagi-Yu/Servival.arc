@@ -5,20 +5,27 @@ using UnityEngine.UI;
 using Central;
 
 public class GameController : MonoBehaviour {
-	public GameObject enemy, healHP,levelUI, scoreUI, upUI
+	public GameObject enemy, healHP,levelUI, scoreUI, upUI, resultUI, resultScoreUI, highScoreUI
 		, upTarget1, upTarget2, upTarget3, levelTarget1, levelTarget2;
 	private GameObject player, HPBall;
 	private GameObject[] enemys = new GameObject[15];
 	private List<int> enemyList = new List<int> ();
-	private int levelBase = 0, enemyCount = 0, t = 0;
+	private int levelBase = 0, enemyCount = 0, first_Score = 0;
 	public int phase;
-	private Text level, score;
+	private Text level, score, resultScore, highScore;
+	private const string HIGH_SCORE_KEY = "HighScore";
 
 	// Use this for initialization
 	void Start () {
 		player = GameObject.FindWithTag ("Player").gameObject;
+
+		//UIたちの初期化
 		level = levelUI.GetComponent<Text> ();
 		score = scoreUI.GetComponent<Text> ();
+		resultScore = resultScoreUI.GetComponent<Text> ();
+		highScore = highScoreUI.GetComponent<Text> ();
+		resultUI.SetActive (false);
+
 		Enums.Level = 0;
 		Enums.Score = 0;
 
@@ -39,9 +46,12 @@ public class GameController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (t != Enums.Score) {
-			t = Enums.Score;
-			score.text = "Score : " + t;
+		if (first_Score < Enums.Score) {
+			first_Score = Enums.Score;
+			score.text = "Score : " + first_Score;
+		}
+		if (player == null) {
+			StartCoroutine (OpenResult ());
 		}
 	}
 
@@ -126,7 +136,7 @@ public class GameController : MonoBehaviour {
 			}
 			yield return new WaitForSeconds (0.5f);
 			if (count == enemys.Length) {
-				if (t != 0) {
+				if (Enums.Level != 0) {
 					iTween.Stop();
 					UIAnimationStart ();
 				}
@@ -136,5 +146,26 @@ public class GameController : MonoBehaviour {
 				Spawn ();
 			}
 		}
+	}
+
+	IEnumerator OpenResult(){
+		yield return new WaitForSeconds (1.5f);
+
+		resultScore.text = "Score : " + first_Score;
+		if (PlayerPrefs.HasKey (HIGH_SCORE_KEY)) {
+			int s = PlayerPrefs.GetInt (HIGH_SCORE_KEY, -1);
+			if (s > first_Score) {
+				highScore.text = "HighScore : " + s;
+			} else {
+				highScore.text = "HighScore : " + first_Score;
+				PlayerPrefs.SetInt (HIGH_SCORE_KEY, first_Score);
+				PlayerPrefs.Save ();
+			}
+		} else {
+			highScore.text = "HighScore : " + first_Score;
+			PlayerPrefs.SetInt (HIGH_SCORE_KEY, first_Score);
+			PlayerPrefs.Save ();
+		}
+		resultUI.SetActive (true);
 	}
 }
