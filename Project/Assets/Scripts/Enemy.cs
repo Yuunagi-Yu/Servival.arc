@@ -10,21 +10,28 @@ public interface EnemyInterface : IEventSystemHandler {
 
 public class Enemy : MonoBehaviour, EnemyInterface {
 	private GameObject destroy, GM, player;
+	private Vector3 direction = Vector3.zero;
 	private Collider col;
+
 	private TextMesh enemyLevel;
 	private int HP = 0, isStraihgt = 0;
 	private float speed = 5;
 	private bool isChase = false;
-	private Vector3 direction = Vector3.zero;
+
+	private AudioSource sound;
 
 	// Use this for initialization
 	void Start () {
 		GM = GameObject.FindWithTag ("GameController").gameObject;
 		player = GameObject.FindWithTag ("Player").gameObject;
+
 		col = gameObject.GetComponent<BoxCollider> ();
 		col.enabled= false;
+
 		destroy = gameObject.transform.FindChild ("DestroyEnemy").gameObject;
 		destroy.SetActive (false);
+
+		sound = destroy.GetComponent<AudioSource> ();
 	}
 
 	void OnEnable(){
@@ -101,6 +108,8 @@ public class Enemy : MonoBehaviour, EnemyInterface {
 			destroy.transform.parent = GM.transform;
 			transform.parent = destroy.transform;
 			this.gameObject.SetActive (false);
+
+			sound.Play ();
 		}
 	}
 
@@ -119,6 +128,8 @@ public class Enemy : MonoBehaviour, EnemyInterface {
 			destroy.transform.parent = GM.transform;
 			transform.parent = destroy.transform;
 			this.gameObject.SetActive (false);
+
+			sound.Play ();
 		}
 	}
 

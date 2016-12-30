@@ -6,18 +6,28 @@ using Central;
 
 public class GameController : MonoBehaviour {
 	public GameObject enemy, healHP,levelUI, scoreUI, upUI, resultUI, resultScoreUI, highScoreUI
-		, upTarget1, upTarget2, upTarget3, levelTarget1, levelTarget2;
+		, upTarget1, upTarget2, upTarget3, levelTarget1, levelTarget2, BGMBox;
 	private GameObject player, HPBall;
 	private GameObject[] enemys = new GameObject[15];
+
+	public AudioSource sound_levelUP;
+	public AudioSource sound_Spawn;
+	public UnityEngine.Audio.AudioMixer mixer;
+
 	private List<int> enemyList = new List<int> ();
 	private int levelBase = 0, enemyCount = 0, first_Score = 0;
 	public int phase;
+
 	private Text level, score, resultScore, highScore;
+
 	private const string HIGH_SCORE_KEY = "HighScore";
 
 	// Use this for initialization
 	void Start () {
 		player = GameObject.FindWithTag ("Player").gameObject;
+
+		BGMBox.SetActive (false);
+		mixer.SetFloat ("BGM2Volume", 0);
 
 		//UIたちの初期化
 		level = levelUI.GetComponent<Text> ();
@@ -86,6 +96,8 @@ public class GameController : MonoBehaviour {
 				enemys [i].transform.position = new Vector3 (x * 3, 0, y * 3);
 			}
 		}
+
+		sound_Spawn.Play ();
 	}
 
 	//UIのアニメーション
@@ -139,6 +151,7 @@ public class GameController : MonoBehaviour {
 				if (Enums.Level != 0) {
 					iTween.Stop();
 					UIAnimationStart ();
+					sound_levelUP.Play ();
 				}
 				yield return new WaitForSeconds (1.5f);
 				Enums.Level++;
@@ -149,6 +162,7 @@ public class GameController : MonoBehaviour {
 	}
 
 	IEnumerator OpenResult(){
+		StartCoroutine (BGMChange ());
 		yield return new WaitForSeconds (1.5f);
 
 		resultScore.text = "Score : " + first_Score;
@@ -167,5 +181,17 @@ public class GameController : MonoBehaviour {
 			PlayerPrefs.Save ();
 		}
 		resultUI.SetActive (true);
+	}
+
+	IEnumerator BGMChange(){
+		float sound = 0;
+		while (sound >= -80) {
+			sound -= 1.6f;
+			mixer.SetFloat ("BGM2Volume", sound);
+			yield return new WaitForSeconds (0.03f);
+		}
+		if (sound <= -80) {
+			BGMBox.SetActive (true);
+		}
 	}
 }
