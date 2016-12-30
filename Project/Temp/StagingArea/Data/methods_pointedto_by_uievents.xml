@@ -1,0 +1,13 @@
+<linker>
+	<assembly fullname="Assembly-CSharp">
+		<type fullname="GuideButton">
+			<method name="OnClick"/>
+			<method name="OnClick"/>
+		</type>
+		<type fullname="SceneButton">
+			<method name="OnClick"/>
+			<method name="OnClick"/>
+			<method name="OnClick"/>
+		</type>
+	</assembly>
+</linker>

@@ -10,15 +10,20 @@ public interface PlayerDamage : IEventSystemHandler {
 public class Player : MonoBehaviour, PlayerDamage {
 	public float speed;
 	public GameObject laser1, HealHP, destroy;
+
 	private Vector3 moveDirection = Vector3.zero;
 	private Vector3 targetPoint = Vector3.zero;
 	private int HP = 10;
 	private TextMesh textMesh;
 	private bool shot = true;
 
+	private AudioSource sound;
+
 	// Use this for initialization
 	void Start () {
 		HealHP.SetActive (false);
+
+		sound = this.gameObject.GetComponent<AudioSource> ();
 
 		//3DTextの初期化
 		textMesh = transform.FindChild ("PlayerLevel").GetComponent<TextMesh> ();
@@ -81,6 +86,8 @@ public class Player : MonoBehaviour, PlayerDamage {
 			HealHP.SetActive (false);
 			HealHP.SetActive (true);
 			col.gameObject.SetActive (false);
+
+			sound.Play ();
 		}
 	}
 
